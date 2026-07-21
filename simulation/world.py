@@ -42,9 +42,9 @@ class World:
     def mutate_generation(self):
         creature_fitness = self.calculate_creature_fitness()
         newGenCreatures = []
-        for creature in creature_fitness[-5:]:
+        for creature in creature_fitness[-10:]:
             newGenCreatures.append(creature)
-            for i in range(3):
+            for i in range(4):
                 mutatedGenome = creature.genome.mutate()
                 x = random.randint(400 + mutatedGenome.size, 775 - mutatedGenome.size)
                 y = random.randint(25 + mutatedGenome.size, 400 - mutatedGenome.size)
@@ -57,16 +57,17 @@ class World:
         totalVision = 0
         totalEfficiency = 0
         totalSize = 0
+        n = len(self.creatures)
         for creature in self.creatures:
             totalSpeed += creature.genome.speed
             totalVision += creature.genome.visionRadius
             totalEfficiency += creature.genome.energyEfficiency
             totalSize += creature.genome.size
 
-        avgSpeed = totalSpeed / 20
-        avgVision = totalVision / 20
-        avgEfficiency = totalEfficiency / 20
-        avgSize = totalSize / 20
+        avgSpeed = totalSpeed / n
+        avgVision = totalVision / n
+        avgEfficiency = totalEfficiency / n
+        avgSize = totalSize / n
 
         print("Speed:", avgSpeed)
         print("Vision:", avgVision)

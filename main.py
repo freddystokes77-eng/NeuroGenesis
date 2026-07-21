@@ -20,13 +20,15 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
+# Returns a new world object
+# Takes a list of creatures as input
 def new_generation(creatures):
     food = []
 
-    for i in range(5):
+    for i in range(20):
         x = random.randint(405, 770)
         y = random.randint(30, 395)
-        food.append(Food((255, 0, 0), (x, y), 5))
+        food.append(Food(RED, (x, y), 5))
         
     return World(400, 25, 375, 375, (0, 255, 0), 
         food, 
@@ -47,11 +49,11 @@ def simulateGeneration(world, screen):
 # Create a world object
 creatures = []
 
-for i in range(20):
-    speed = random.uniform(0.5,2)
-    visionRadius = random.randint(25,50)
-    energyEfficiency = random.randint(20,80)
-    size = random.randint(1,10)
+for i in range(50):
+    speed = random.uniform(0.01,0.5)
+    visionRadius = random.uniform(5,25)
+    energyEfficiency = random.uniform(20,80)
+    size = random.randint(1,5)
     x = random.randint(400 + size, 775 - size)
     y = random.randint(25 + size, 400 - size)
     creatures.append(Creature(Genome(speed, visionRadius, energyEfficiency, size), BLUE, (x, y), 100, True))
@@ -82,9 +84,8 @@ while running:
         startTime = currentTime
         genCount += 1
         
-        
-
     simulateGeneration(world, screen)
+    
     pygame.display.update()
 
     # Limit frame rate to 60fps

@@ -1,12 +1,12 @@
 import pygame
 import random
 import math
-from simulation.brain.base_brain import Brain
+from simulation.brain.rule_based_brain import RuleBasedBrain
 
 class Creature:
     def __init__(self, genome, colour, position, energy, isAlive):
         self.genome = genome
-        self.brain = Brain(self)
+        self.brain = RuleBasedBrain(self)
         self.colour = colour
         self.position = position
         self.speed_x = 0
@@ -32,8 +32,8 @@ class Creature:
             self.energySpent += energyLost
 
     def gain_energy(self):
-        self.energy += 5
-        self.foodEaten += 5
+        self.energy += 10
+        self.foodEaten += 10
         if self.energy > 100:
             self.energy = 100
 

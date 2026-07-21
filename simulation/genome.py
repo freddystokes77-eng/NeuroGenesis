@@ -14,15 +14,15 @@ class Genome:
         mutatedEfficiency = random.uniform(self.energyEfficiency - 0.1 * self.energyEfficiency, self.energyEfficiency + 0.1 * self.energyEfficiency)
         mutatedSize = random.randint(self.size - 1, self.size + 1)
 
-        if mutatedSpeed < 0.5:
-            mutatedSpeed = 0.5
-        elif mutatedSpeed > 2:
-            mutatedSpeed = 2
+        if mutatedSpeed < 0.01:
+            mutatedSpeed = 0.01
+        elif mutatedSpeed > 1:
+            mutatedSpeed = 1
         
-        if mutatedVision < 25:
+        if mutatedVision < 5:
+            mutatedVision = 5
+        elif mutatedVision > 25:
             mutatedVision = 25
-        elif mutatedVision > 50:
-            mutatedVision = 50
         
         if mutatedEfficiency < 20:
             mutatedEfficiency = 20
@@ -31,7 +31,7 @@ class Genome:
         
         if mutatedSize < 1:
             mutatedSize = 1
-        elif mutatedSize > 10:
-            mutatedSize = 10
+        elif mutatedSize > 5:
+            mutatedSize = 5
         
         return Genome(mutatedSpeed, mutatedVision, mutatedEfficiency, mutatedSize)

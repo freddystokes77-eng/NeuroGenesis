@@ -1,19 +1,13 @@
 import math
-
-class Brain:
-
+from abc import ABC, abstractmethod
+class Brain(ABC):
     def __init__(self, creature):
         self.creature = creature
-
+    
+    @abstractmethod
     def decideDirection(self, world):
-        for food_item in world.food:
-            coordinates = food_item.position
-            distance = self.getDistanceTo(coordinates)
-            if distance <= self.creature.genome.visionRadius:
-                speed_x, speed_y = self.getSpeed(coordinates)
-                return speed_x, speed_y
-        return self.creature.speed_x, self.creature.speed_y
-
+        pass
+    
     def getDistanceTo(self, coordinates):
         x1, y1 = self.creature.position
         x2, y2 = coordinates
