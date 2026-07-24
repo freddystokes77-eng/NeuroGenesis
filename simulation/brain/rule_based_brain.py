@@ -1,7 +1,7 @@
 from simulation.brain.base_brain import Brain
 
 class RuleBasedBrain(Brain):
-    def decideDirection(self, world):
+    def decide(self, world):
         for food_item in world.food:
             coordinates = food_item.position
             distance = self.getDistanceTo(coordinates)

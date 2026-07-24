@@ -5,6 +5,7 @@ from simulation.genome import Genome
 import pygame
 from pygame.locals import *
 import random
+import numpy as np
 
 # Initialise Pygame
 pygame.init()
@@ -41,7 +42,6 @@ def simulateGeneration(world, screen):
     for creature in world.creatures:
         if creature.isAlive:
             creature.move(world)
-            creature.drain_energy()
     
     world.draw_creatures(screen)
     world.draw_food(screen)
@@ -54,9 +54,10 @@ for i in range(50):
     visionRadius = random.uniform(5,25)
     energyEfficiency = random.uniform(20,80)
     size = random.randint(1,5)
+    weights = np.random.randn(42)
     x = random.randint(400 + size, 775 - size)
     y = random.randint(25 + size, 400 - size)
-    creatures.append(Creature(Genome(speed, visionRadius, energyEfficiency, size), BLUE, (x, y), 100, True))
+    creatures.append(Creature(Genome(speed, visionRadius, energyEfficiency, size, weights), BLUE, (x, y), 100, True))
 
     
 world = new_generation(creatures)
@@ -64,7 +65,7 @@ world = new_generation(creatures)
 # Create a timer
 startTime = 0
 currentTime = 0
-duration = 20000
+duration = 15000
 
 # Create a generation counter
 genCount = 1

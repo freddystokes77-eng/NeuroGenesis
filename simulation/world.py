@@ -33,8 +33,8 @@ class World:
     def calculate_creature_fitness(self):
         for creature in self.creatures:
             if creature.isAlive:
-                creature.timeSurvived = 30000
-            creature.fitness = creature.timeSurvived + creature.foodEaten - creature.energySpent
+                creature.timeSurvived = 15000
+            creature.fitness = (creature.timeSurvived / 1000.0) + (creature.foodEaten * 0.5) - (creature.energySpent * 1.5)
 
         creature_fitness = sorted(self.creatures, key=lambda creature: creature.fitness)
         return creature_fitness
@@ -42,9 +42,9 @@ class World:
     def mutate_generation(self):
         creature_fitness = self.calculate_creature_fitness()
         newGenCreatures = []
-        for creature in creature_fitness[-10:]:
+        for creature in creature_fitness[-5:]:
             newGenCreatures.append(creature)
-            for i in range(4):
+            for i in range(9):
                 mutatedGenome = creature.genome.mutate()
                 x = random.randint(400 + mutatedGenome.size, 775 - mutatedGenome.size)
                 y = random.randint(25 + mutatedGenome.size, 400 - mutatedGenome.size)

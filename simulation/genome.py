@@ -7,12 +7,14 @@ class Genome:
     visionRadius : float
     energyEfficiency : float
     size : int
+    weights : list[float]
 
     def mutate(self):
-        mutatedSpeed = random.uniform(self.speed - 0.1 * self.speed, self.speed + 0.1 * self.speed)
-        mutatedVision = random.uniform(self.visionRadius - 0.1 * self.visionRadius, self.visionRadius + 0.1 * self.visionRadius)
-        mutatedEfficiency = random.uniform(self.energyEfficiency - 0.1 * self.energyEfficiency, self.energyEfficiency + 0.1 * self.energyEfficiency)
+        mutatedSpeed = random.uniform(self.speed - 0.05 * self.speed, self.speed + 0.05 * self.speed)
+        mutatedVision = random.uniform(self.visionRadius - 0.05 * self.visionRadius, self.visionRadius + 0.05 * self.visionRadius)
+        mutatedEfficiency = random.uniform(self.energyEfficiency - 0.05 * self.energyEfficiency, self.energyEfficiency + 0.05 * self.energyEfficiency)
         mutatedSize = random.randint(self.size - 1, self.size + 1)
+        mutatedWeights = [random.uniform(x - 0.01 * x, x + 0.01 * x) for x in self.weights]
 
         if mutatedSpeed < 0.01:
             mutatedSpeed = 0.01
@@ -34,4 +36,4 @@ class Genome:
         elif mutatedSize > 5:
             mutatedSize = 5
         
-        return Genome(mutatedSpeed, mutatedVision, mutatedEfficiency, mutatedSize)
+        return Genome(mutatedSpeed, mutatedVision, mutatedEfficiency, mutatedSize, mutatedWeights)

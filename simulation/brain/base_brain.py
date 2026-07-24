@@ -5,7 +5,7 @@ class Brain(ABC):
         self.creature = creature
     
     @abstractmethod
-    def decideDirection(self, world):
+    def decide(self, world):
         pass
     
     def getDistanceTo(self, coordinates):
