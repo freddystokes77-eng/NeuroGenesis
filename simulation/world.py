@@ -2,6 +2,7 @@ import pygame
 from simulation.food import Food
 from simulation.creature import Creature
 import random
+import numpy as np
 
 class World:
     def __init__(self, left, top, width, height, colour, food, creatures):
@@ -33,8 +34,8 @@ class World:
     def calculate_creature_fitness(self):
         for creature in self.creatures:
             if creature.isAlive:
-                creature.timeSurvived = 15000
-            creature.fitness = (creature.timeSurvived / 1000.0) + (creature.foodEaten * 0.5) - (creature.energySpent * 1.5)
+                creature.timeSurvived = 20000
+            creature.fitness = (creature.timeSurvived / 500) + (creature.foodEaten) 
 
         creature_fitness = sorted(self.creatures, key=lambda creature: creature.fitness)
         return creature_fitness
@@ -57,21 +58,29 @@ class World:
         totalVision = 0
         totalEfficiency = 0
         totalSize = 0
+        totalWeights = np.zeros(42)
         n = len(self.creatures)
         for creature in self.creatures:
             totalSpeed += creature.genome.speed
             totalVision += creature.genome.visionRadius
             totalEfficiency += creature.genome.energyEfficiency
             totalSize += creature.genome.size
+            for i in range(len(creature.genome.weights)):
+                totalWeights[i] += creature.genome.weights[i]
+
 
         avgSpeed = totalSpeed / n
         avgVision = totalVision / n
         avgEfficiency = totalEfficiency / n
         avgSize = totalSize / n
+        for total in totalWeights:
+            total /= n
+        avgWeights = totalWeights
 
         print("Speed:", avgSpeed)
         print("Vision:", avgVision)
         print("Efficiency:", avgEfficiency)
         print("Size:", avgSize)
+        print("Average weights:", avgWeights)
 
 

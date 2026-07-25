@@ -50,8 +50,8 @@ def simulateGeneration(world, screen):
 creatures = []
 
 for i in range(50):
-    speed = random.uniform(0.01,0.5)
-    visionRadius = random.uniform(5,25)
+    speed = random.uniform(0.5,2)
+    visionRadius = random.uniform(50,100)
     energyEfficiency = random.uniform(20,80)
     size = random.randint(1,5)
     weights = np.random.randn(42)
@@ -65,7 +65,7 @@ world = new_generation(creatures)
 # Create a timer
 startTime = 0
 currentTime = 0
-duration = 15000
+duration = 20000
 
 # Create a generation counter
 genCount = 1

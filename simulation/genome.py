@@ -14,17 +14,17 @@ class Genome:
         mutatedVision = random.uniform(self.visionRadius - 0.05 * self.visionRadius, self.visionRadius + 0.05 * self.visionRadius)
         mutatedEfficiency = random.uniform(self.energyEfficiency - 0.05 * self.energyEfficiency, self.energyEfficiency + 0.05 * self.energyEfficiency)
         mutatedSize = random.randint(self.size - 1, self.size + 1)
-        mutatedWeights = [random.uniform(x - 0.01 * x, x + 0.01 * x) for x in self.weights]
+        mutatedWeights = [random.uniform(x - 0.05 * x, x + 0.05 * x) for x in self.weights]
 
-        if mutatedSpeed < 0.01:
-            mutatedSpeed = 0.01
-        elif mutatedSpeed > 1:
-            mutatedSpeed = 1
+        if mutatedSpeed < 0.5:
+            mutatedSpeed = 0.5
+        elif mutatedSpeed > 2:
+            mutatedSpeed = 2
         
-        if mutatedVision < 5:
-            mutatedVision = 5
-        elif mutatedVision > 25:
-            mutatedVision = 25
+        if mutatedVision < 50:
+            mutatedVision = 50
+        elif mutatedVision > 100:
+            mutatedVision = 100
         
         if mutatedEfficiency < 20:
             mutatedEfficiency = 20

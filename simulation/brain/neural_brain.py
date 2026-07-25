@@ -77,5 +77,10 @@ class NeuralBrain(Brain):
             x2, y2 = (x, bottom)
 
         x1, y1 = nearestFood
+        dxFoodNormalised = (x1 - x) / self.creature.genome.visionRadius
+        dyFoodNormalised = (y1 - y) / self.creature.genome.visionRadius
 
-        return np.array([x1, y1, x2, y2, self.creature.energy], dtype=float)
+        dxWallNormalised = (x2 - x) / world.width
+        dyWallNormalised = (y2 - y) / world.width
+
+        return np.array([dxFoodNormalised, dyFoodNormalised, dxWallNormalised, dyWallNormalised, self.creature.energy / 100], dtype=float)

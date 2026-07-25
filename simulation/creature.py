@@ -26,14 +26,13 @@ class Creature:
             self.timeSurvived = pygame.time.get_ticks()
         else:
             percentageOfMaxSpeed = currentSpeed / self.genome.speed
-            energyLost = 0.02 + ((0.04 * percentageOfMaxSpeed) / (self.genome.energyEfficiency / 100))
-            #energyLost = 0.02 + ((0.03 * percentageOfMaxSpeed) / (self.genome.energyEfficiency / 100))
+            energyLost = 0.02 + ((0.03 * percentageOfMaxSpeed) / (self.genome.energyEfficiency / 100))
             self.energy -= energyLost
             self.energySpent += energyLost
 
     def gain_energy(self):
-        self.energy += 15
-        self.foodEaten += 15
+        self.energy += 40
+        self.foodEaten += 40
         if self.energy > 100:
             self.energy = 100
 
@@ -62,7 +61,6 @@ class Creature:
         elif x >= max_x:
             x = max_x
             self.speed_x = -abs(self.speed_x)
-
         if y <= min_y:
             y = min_y
             self.speed_y = abs(self.speed_y)
