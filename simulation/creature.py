@@ -10,6 +10,7 @@ class Creature:
         self.position = position
         self.speed_x = 0
         self.speed_y = 0
+        self.heading = 0
         self.energy = energy
         self.isAlive = isAlive
         self.timeSurvived = 0
@@ -26,7 +27,7 @@ class Creature:
             self.timeSurvived = pygame.time.get_ticks()
         else:
             percentageOfMaxSpeed = currentSpeed / self.genome.speed
-            energyLost = 0.02 + ((0.03 * percentageOfMaxSpeed) / (self.genome.energyEfficiency / 100))
+            energyLost = 0.05 + ((0.06 * percentageOfMaxSpeed) / (self.genome.energyEfficiency / 100))
             self.energy -= energyLost
             self.energySpent += energyLost
 
@@ -43,7 +44,7 @@ class Creature:
     def move(self, world):
         x, y = self.position
         direction = self.brain.decide(world)
-        self.speed_x, self.speed_y = direction
+        self.speed_x, self.speed_y, self.heading = direction
 
         # Update position
         x += self.speed_x

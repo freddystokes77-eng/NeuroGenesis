@@ -54,7 +54,7 @@ for i in range(50):
     visionRadius = random.uniform(50,100)
     energyEfficiency = random.uniform(20,80)
     size = random.randint(1,5)
-    weights = np.random.randn(42)
+    weights = np.random.uniform(-1, 1, 42)
     x = random.randint(400 + size, 775 - size)
     y = random.randint(25 + size, 400 - size)
     creatures.append(Creature(Genome(speed, visionRadius, energyEfficiency, size, weights), BLUE, (x, y), 100, True))

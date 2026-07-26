@@ -33,7 +33,7 @@ class NeuralBrain(Brain):
         if not (math.isfinite(vx) and math.isfinite(vy)):
             return 0.0, 0.0
 
-        return vx, vy
+        return vx, vy, bearing
     
     def tanh(self, z):
         # Use NumPy's stable tanh implementation to avoid overflow/NaN values.
@@ -43,6 +43,7 @@ class NeuralBrain(Brain):
         # Get nearest visible food coordinates.
         nearestFood = (world.left + world.width / 2, world.top + world.height / 2)
         nearestFoodDistance = math.inf
+        isFoodVisible = False
 
         for food_item in world.food:
             coordinates = food_item.position
@@ -50,6 +51,7 @@ class NeuralBrain(Brain):
             if distance <= self.creature.genome.visionRadius and distance < nearestFoodDistance:
                 nearestFood = coordinates
                 nearestFoodDistance = distance
+                isFoodVisible = True
 
         # Get nearest wall coordinates from the actual world rectangle.
         x, y = self.creature.position
@@ -57,30 +59,27 @@ class NeuralBrain(Brain):
         right = world.left + world.width
         top = world.top
         bottom = world.top + world.height
+        worldDiagonal = math.sqrt(world.width**2 + world.height**2)
 
-        wallDistances = {
-            'left': x - left,
-            'right': right - x,
-            'top': y - top,
-            'bottom': bottom - y,
-        }
-        nearestWallName = min(wallDistances, key=wallDistances.get)
-        nearestWallDistance = wallDistances[nearestWallName]
+        tList = []
+        dir_x = math.sin(self.creature.heading)
+        dir_y = -math.cos(self.creature.heading)
 
-        if nearestWallName == 'left':
-            x2, y2 = (left, y)
-        elif nearestWallName == 'right':
-            x2, y2 = (right, y)
-        elif nearestWallName == 'top':
-            x2, y2 = (x, top)
-        else:
-            x2, y2 = (x, bottom)
+        if dir_x != 0:
+            tList.append((left - x) / dir_x)
+            tList.append((right - x) / dir_x)
+        if dir_y != 0:
+            tList.append((top - y) / dir_y)
+            tList.append((bottom - y) / dir_y)
+
+        smallestPositiveT = min([x for x in tList if x >= 0])
+        normalisedDistanceToWallAhead = smallestPositiveT / worldDiagonal
 
         x1, y1 = nearestFood
-        dxFoodNormalised = (x1 - x) / self.creature.genome.visionRadius
-        dyFoodNormalised = (y1 - y) / self.creature.genome.visionRadius
+        normalisedFoodDirection = math.atan2(x1 - x, -(y1 - y)) - self.creature.heading
+        normalisedFoodDirection = (normalisedFoodDirection) % (2 * math.pi) - math.pi
+        normalisedFoodDirection /= math.pi
+        normalisedFoodDistance = nearestFoodDistance / worldDiagonal
 
-        dxWallNormalised = (x2 - x) / world.width
-        dyWallNormalised = (y2 - y) / world.width
 
-        return np.array([dxFoodNormalised, dyFoodNormalised, dxWallNormalised, dyWallNormalised, self.creature.energy / 100], dtype=float)
+        return np.array([int(isFoodVisible), normalisedFoodDirection, normalisedFoodDistance, normalisedDistanceToWallAhead ,self.creature.energy / 100], dtype=float)
