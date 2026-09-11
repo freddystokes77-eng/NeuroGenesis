@@ -5,7 +5,12 @@ from simulation.brain.neural_brain import NeuralBrain
 class Creature:
     def __init__(self, genome, colour, position, energy, isAlive):
         self.genome = genome
-        self.brain = NeuralBrain(self, genome.weights)
+        # Only create a NeuralBrain for plain Creature instances.
+        # Subclasses (e.g. Predator) will set their own brain after calling super().__init__.
+        if type(self) is Creature:
+            self.brain = NeuralBrain(self, genome.weights)
+        else:
+            self.brain = None
         self.colour = colour
         self.position = position
         self.speed_x = 0
@@ -14,7 +19,6 @@ class Creature:
         self.energy = energy
         self.isAlive = isAlive
         self.timeSurvived = 0
-        self.energySpent = 0
         self.foodEaten = 0
         self.fitness = 0
 
@@ -27,19 +31,14 @@ class Creature:
             self.timeSurvived = pygame.time.get_ticks()
         else:
             percentageOfMaxSpeed = currentSpeed / self.genome.speed
-            energyLost = 0.05 + ((0.06 * percentageOfMaxSpeed) / (self.genome.energyEfficiency / 100))
+            energyLost = 0.06 + ((0.07 * percentageOfMaxSpeed) / (self.genome.energyEfficiency / 100))
             self.energy -= energyLost
-            self.energySpent += energyLost
 
     def gain_energy(self):
-        self.energy += 40
-        self.foodEaten += 40
-        if self.energy > 100:
-            self.energy = 100
-
-    # def set_speed(self):
-    #     speed = self.genome.speed
-    #     self.speed_x, self.speed_y = self.brain.decide()
+        self.energy += 50
+        self.foodEaten += 50
+        if self.energy > 200:
+            self.energy = 200
 
     def move(self, world):
         x, y = self.position

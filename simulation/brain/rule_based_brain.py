@@ -1,11 +1,14 @@
-from simulation.brain.base_brain import Brain
+# from simulation.brain.base_brain import Brain
+# import math
 
-class RuleBasedBrain(Brain):
-    def decide(self, world):
-        for food_item in world.food:
-            coordinates = food_item.position
-            distance = self.getDistanceTo(coordinates)
-            if distance <= self.creature.genome.visionRadius:
-                speed_x, speed_y = self.getSpeed(coordinates)
-                return speed_x, speed_y
-        return self.creature.speed_x, self.creature.speed_y
+# class RuleBasedBrain(Brain):
+#     def decide(self, world):
+#         for food_item in world.food:
+#             coordinates = food_item.position
+#             distance = self.getDistanceTo(coordinates)
+#             if distance <= self.creature.genome.visionRadius:
+#                 speed_x, speed_y = self.getSpeed(coordinates)
+#                 heading = math.atan2(speed_x, -speed_y)
+#                 return speed_x, speed_y, heading
+#         heading = math.atan2(self.creature.speed_x, -self.creature.speed_y)
+#         return self.creature.speed_x, self.creature.speed_y, heading

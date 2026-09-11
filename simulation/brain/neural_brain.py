@@ -7,13 +7,13 @@ class NeuralBrain(Brain):
         super().__init__(creature)
 
         # Define HyperParameters
-        self.inputLayerSize = 5
+        self.inputLayerSize = 8
         self.outputLayerSize = 2
         self.hiddenLayerSize = 6
 
-        # Weights
-        self.W1 = np.array([weights[:6], weights[6:12], weights[12:18], weights[18:24], weights[24:30]])
-        self.W2 = np.array([weights[30:32], weights[32:34], weights[34:36], weights[36:38], weights[38:40], weights[40:42]])
+        # Define weights
+        self.W1 = np.array([weights[:6], weights[6:12], weights[12:18], weights[18:24], weights[24:30], weights[30:36], weights[36:42], weights[42:48]])
+        self.W2 = np.array([weights[48:50], weights[50:52], weights[52:54], weights[54:56], weights[56:58], weights[58:60]])
         
     def decide(self, world):
         X = self.getInputs(world)
@@ -24,14 +24,14 @@ class NeuralBrain(Brain):
         y1, y2 = self.tanh(self.z3)
 
         bearing = float(y1) * math.pi
-        speed = float(abs(y2)) * self.creature.genome.speed
+        speed = 0.2 * self.creature.genome.speed + 0.8 * (float(abs(y2)) * self.creature.genome.speed)
 
         # Convert heading into velocity components.
         vx = speed * math.sin(bearing)
         vy = -speed * math.cos(bearing)
 
         if not (math.isfinite(vx) and math.isfinite(vy)):
-            return 0.0, 0.0
+            return 0.0, 0.0, 0.0
 
         return vx, vy, bearing
     
@@ -52,6 +52,19 @@ class NeuralBrain(Brain):
                 nearestFood = coordinates
                 nearestFoodDistance = distance
                 isFoodVisible = True
+
+        # Get nearest visible predator coordinates
+        nearestPredator = (world.left + world.width / 2, world.top + world.height / 2)
+        nearestPredatorDistance = math.inf
+        isPredatorVisible = False
+
+        for predator in world.predators:
+            coordinates = predator.position
+            distance = self.getDistanceTo(coordinates)
+            if distance <= self.creature.genome.visionRadius and distance < nearestPredatorDistance:
+                nearestPredator = coordinates
+                nearestPredatorDistance = distance
+                isPredatorVisible = True
 
         # Get nearest wall coordinates from the actual world rectangle.
         x, y = self.creature.position
@@ -81,5 +94,10 @@ class NeuralBrain(Brain):
         normalisedFoodDirection /= math.pi
         normalisedFoodDistance = nearestFoodDistance / worldDiagonal
 
+        x2, y2 = nearestPredator
+        normalisedPredatorDirection = math.atan2(x2 - x, -(y2 - y)) - self.creature.heading
+        normalisedPredatorDirection = (normalisedPredatorDirection) % (2 * math.pi) - math.pi
+        normalisedPredatorDirection /= math.pi
+        normalisedPredatorDistance = nearestPredatorDistance / worldDiagonal
 
-        return np.array([int(isFoodVisible), normalisedFoodDirection, normalisedFoodDistance, normalisedDistanceToWallAhead ,self.creature.energy / 100], dtype=float)
+        return np.array([int(isFoodVisible), normalisedFoodDirection, normalisedFoodDistance, int(isPredatorVisible), normalisedPredatorDirection, normalisedPredatorDistance, normalisedDistanceToWallAhead ,self.creature.energy / 200], dtype=float)
