@@ -11,11 +11,26 @@ class Genome:
     weights : list[float]
 
     def mutate(self):
-        mutatedSpeed = random.uniform(self.speed - 0.05 * self.speed, self.speed + 0.05 * self.speed)
-        mutatedVision = random.uniform(self.visionRadius - 0.05 * self.visionRadius, self.visionRadius + 0.05 * self.visionRadius)
-        mutatedEfficiency = random.uniform(self.energyEfficiency - 0.05 * self.energyEfficiency, self.energyEfficiency + 0.05 * self.energyEfficiency)
-        mutatedSize = random.randint(self.size - 1, self.size + 1)
-        mutatedWeights = [random.uniform(x - 0.05 * x, x + 0.05 * x) for x in self.weights]
+        # mutatedSpeed = random.uniform(self.speed - 0.05 * self.speed, self.speed + 0.05 * self.speed)
+        # mutatedVision = random.uniform(self.visionRadius - 0.05 * self.visionRadius, self.visionRadius + 0.05 * self.visionRadius)
+        # mutatedEfficiency = random.uniform(self.energyEfficiency - 0.05 * self.energyEfficiency, self.energyEfficiency + 0.05 * self.energyEfficiency)
+        # mutatedSize = random.randint(self.size - 1, self.size + 1)
+        mutatedSpeed = self.speed
+        mutatedVision = self.visionRadius
+        mutatedEfficiency = self.energyEfficiency
+        mutatedSize = self.size
+        mutation_rate = 0.10
+        mutation_amount = 0.05
+
+        # Make a copy so the original genome isn't changed
+        mutatedWeights = self.weights.copy()
+
+        for i in range(len(mutatedWeights)):
+            if random.random() < mutation_rate:
+                mutatedWeights[i] += random.uniform(
+                    -mutation_amount,
+                    mutation_amount
+                )
 
         if type(self) == Creature:
             if mutatedSpeed < 0.2:
